@@ -68,23 +68,24 @@ main() {
   set status-right-length "100"
 
   # messages
-  set message-style "fg=${thm_cyan},bg=${thm_gray},align=centre"
+  set message-style "fg=black,bg=${thm_green},align=centre"
   set message-command-style "fg=${thm_cyan},bg=${thm_gray},align=centre"
 
   # panes
   local pane_border_status pane_border_style \
     pane_active_border_style pane_left_separator pane_middle_separator \
     pane_right_separator pane_number_position pane_format
-  pane_status_enable=$(get_tmux_option "@catppuccin_pane_status_enabled" "no") # yes
-  pane_border_status=$(get_tmux_option "@catppuccin_pane_border_status" "off") # bottom
-  pane_border_style=$(get_tmux_option "@catppuccin_pane_border_style" "fg=${thm_gray}")
+  pane_status_enable=$(get_tmux_option "@catppuccin_pane_status_enabled" "yes") # yes
+  pane_border_status=$(get_tmux_option "@catppuccin_pane_border_status" "top") # bottom
+  pane_border_style=$(get_tmux_option "@catppuccin_pane_border_style" "fg=${thm_un_active}")
   pane_active_border_style=$(
     get_tmux_option "@catppuccin_pane_active_border_style" \
-      "#{?pane_in_mode,fg=${thm_yellow},#{?pane_synchronized,fg=${thm_magenta},fg=${thm_orange}}}"
+      "fg=${thm_active_or_noactive},bg=${thm_mode_or_nomode}"
   )
-  pane_left_separator=$(get_tmux_option "@catppuccin_pane_left_separator" "█")
-  pane_middle_separator=$(get_tmux_option "@catppuccin_pane_middle_separator" "█")
-  pane_right_separator=$(get_tmux_option "@catppuccin_pane_right_separator" "█")
+
+  pane_left_separator=$(get_tmux_option "@catppuccin_pane_left_separator" "#{?pane_in_mode,█,}")
+  pane_middle_separator=$(get_tmux_option "@catppuccin_pane_middle_separator" " ")
+  pane_right_separator=$(get_tmux_option "@catppuccin_pane_right_separator" "#{?pane_in_mode,█,}")
   pane_number_position=$(get_tmux_option "@catppuccin_pane_number_position" "left") # right, left
   pane_format=$(load_modules "pane_default_format" "$modules_custom_path" "$modules_pane_path")
 
@@ -98,14 +99,14 @@ main() {
     window_middle_separator window_number_position window_status_enable \
     window_format window_current_format
 
-  window_status_separator=$(get_tmux_option "@catppuccin_window_separator" "")
+  window_status_separator=$(get_tmux_option "@catppuccin_window_separator" " ")
   setw window-status-separator "$window_status_separator"
 
-  window_left_separator=$(get_tmux_option "@catppuccin_window_left_separator" "█")
-  window_right_separator=$(get_tmux_option "@catppuccin_window_right_separator" "█")
-  window_middle_separator=$(get_tmux_option "@catppuccin_window_middle_separator" "█ ")
+  window_left_separator=$(get_tmux_option "@catppuccin_window_left_separator" "")
+  window_right_separator=$(get_tmux_option "@catppuccin_window_right_separator" "")
+  window_middle_separator=$(get_tmux_option "@catppuccin_window_middle_separator" " ")
   window_number_position=$(get_tmux_option "@catppuccin_window_number_position" "left") # right, left
-  window_status_enable=$(get_tmux_option "@catppuccin_window_status_enable" "no")       # right, left
+  window_status_enable=$(get_tmux_option "@catppuccin_window_status_enable" "yes")       # right, left
 
   window_format=$(load_modules "window_default_format" "$modules_custom_path" "$modules_window_path")
   setw window-status-format "$window_format"
@@ -116,22 +117,22 @@ main() {
   # status module
   local status_left_separator status_right_separator status_connect_separator \
     status_fill status_modules_left status_modules_right
-  status_left_separator=$(get_tmux_option "@catppuccin_status_left_separator" "")
-  status_right_separator=$(get_tmux_option "@catppuccin_status_right_separator" "█")
-  status_connect_separator=$(get_tmux_option "@catppuccin_status_connect_separator" "yes")
-  status_fill=$(get_tmux_option "@catppuccin_status_fill" "icon")
+  status_left_separator=$(get_tmux_option "@catppuccin_status_left_separator" " ")
+  status_right_separator=$(get_tmux_option "@catppuccin_status_right_separator" "")
+  status_connect_separator=$(get_tmux_option "@catppuccin_status_connect_separator" "no")
+  status_fill=$(get_tmux_option "@catppuccin_status_fill" "all")
 
   status_modules_left=$(get_tmux_option "@catppuccin_status_modules_left" "")
   loaded_modules_left=$(load_modules "$status_modules_left" "$modules_custom_path" "$modules_status_path")
   set status-left "$loaded_modules_left"
 
-  status_modules_right=$(get_tmux_option "@catppuccin_status_modules_right" "application session")
+  status_modules_right=$(get_tmux_option "@catppuccin_status_modules_right" "session date_time")
   loaded_modules_right=$(load_modules "$status_modules_right" "$modules_custom_path" "$modules_status_path")
   set status-right "$loaded_modules_right"
 
   # modes
   setw clock-mode-colour "${thm_blue}"
-  setw mode-style "fg=${thm_pink} bg=${thm_black4} bold"
+  setw mode-style "fg=${thm_green} bg=${thm_un_active} bold"
 
   tmux "${tmux_commands[@]}"
 }
