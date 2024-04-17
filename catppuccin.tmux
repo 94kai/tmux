@@ -121,7 +121,7 @@ main() {
 
   # modes
   setw clock-mode-colour "${thm_blue}"
-  setw mode-style "fg=${thm_green} bg=${thm_un_active} bold"
+  setw mode-style "fg=${thm_bg} bg=${thm_green} bold"
 
   tmux "${tmux_commands[@]}"
 }
